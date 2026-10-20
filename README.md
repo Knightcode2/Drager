@@ -49,12 +49,6 @@ Every push runs these jobs on GitHub's Windows machines:
 - **End-to-end:** a script moves the real mouse to drag files from File Explorer *and* the Desktop, presses Shift, drops on every conversion and tool, drives each tool window, and checks every output file (format, dimensions, page counts, encryption, metadata removed). The results table and a screen recording are saved to the `e2e-output` branch.
 - **Demo video:** pushing to the `demo` branch records a showcase video.
 
-## Support
-
-DragShift is free. If it saves you time, you can leave a tip on Cash App: [**$AtikaKadesha**](https://cash.app/$AtikaKadesha). Thank you!
-
-<img src="docs/tip-cashapp.png" alt="Cash App QR code for $AtikaKadesha" width="220">
-
 ## License
 
 [MIT](LICENSE): free to use, modify and share.
