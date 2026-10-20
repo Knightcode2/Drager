@@ -3,32 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DragShift – Convert and edit files by dragging them onto a menu</title>
-<meta name="description" content="DragShift is a free Windows app. Drag any file, press Shift, drop it on a slice to convert, compress, resize, crop, annotate, redact, merge, split or protect it. Originals are never changed.">
+<title>Drager – Convert and edit files by dragging them onto a menu</title>
+<meta name="description" content="Drager is a free Windows app. Drag any file, press Shift, drop it on a slice to convert, compress, resize, crop, annotate, redact, merge, split or protect it. Originals are never changed.">
 <style>
 :root{
-  --bg:#0f1418;--panel:#161d23;--line:#27313a;--text:#e8edf1;--muted:#8d9aa5;--accent:#5cc8ff;--accent-ink:#04202c;
+  --bg:#0c0a1d;--panel:#16123a;--line:#2d2862;--text:#eeeaff;--muted:#a09bcc;
+  --accent:#7c4dff;--accent-ink:#fff;--link:#b8a1ff;--btn2:#d946ef;
+  --glow:0 0 0 1px rgba(184,161,255,.6),0 14px 38px -10px rgba(124,77,255,.75),0 0 32px rgba(217,70,239,.28);
+  --ambient:radial-gradient(900px 520px at 85% -8%,rgba(124,77,255,.28),transparent 62%),radial-gradient(700px 420px at 0% 18%,rgba(217,70,239,.14),transparent 60%);
   color-scheme:dark;
 }
 @media (prefers-color-scheme:light){
-  :root{--bg:#f4f6f8;--panel:#fff;--line:#dbe2e8;--text:#14202a;--muted:#5a6a77;--accent:#0a7bb5;--accent-ink:#fff;color-scheme:light}
+  :root{--bg:#f5f2ff;--panel:#fff;--line:#dcd4f5;--text:#1b1440;--muted:#5f5887;--accent:#6d28d9;--accent-ink:#fff;--link:#6d28d9;--btn2:#c026d3;
+  --glow:0 0 0 1px rgba(109,40,217,.5),0 14px 34px -10px rgba(109,40,217,.45),0 0 26px rgba(192,38,211,.18);
+  --ambient:radial-gradient(900px 520px at 85% -8%,rgba(124,77,255,.16),transparent 62%),radial-gradient(700px 420px at 0% 18%,rgba(217,70,239,.08),transparent 60%);
+  color-scheme:light}
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
-a{color:var(--accent)}
+body{margin:0;background-color:var(--bg);background-image:var(--ambient);background-attachment:fixed;color:var(--text);font:16px/1.6 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+a{color:var(--link)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
 .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
-header{border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+header{border-bottom:1px solid var(--line);position:sticky;top:0;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:5}
 header .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
 .brand{font-weight:700;letter-spacing:.2px;color:var(--text);text-decoration:none}
 nav{display:flex;gap:20px;align-items:center;font-size:14px}
 nav a{color:var(--muted);text-decoration:none}
 nav a:hover{color:var(--text)}
-.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:600;padding:11px 20px;border-radius:8px;text-decoration:none;border:1px solid var(--accent)}
-.btn:hover{filter:brightness(1.08)}
+.btn{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--btn2));color:#fff;font-weight:600;padding:11px 20px;border-radius:8px;text-decoration:none;border:1px solid transparent;transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s}
+.btn:hover{transform:translateY(-3px);box-shadow:var(--glow)}
 .btn.ghost{background:transparent;color:var(--text);border-color:var(--line)}
-.btn.ghost:hover{border-color:var(--muted)}
+.btn.ghost:hover{border-color:var(--link)}
 nav .btn{padding:6px 14px;font-size:14px;color:var(--accent-ink)}
 .hero{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding:56px 0 48px}
 h1{font-size:clamp(32px,5vw,48px);line-height:1.12;margin:0 0 16px;letter-spacing:-.5px}
@@ -37,8 +43,8 @@ h1{font-size:clamp(32px,5vw,48px);line-height:1.12;margin:0 0 16px;letter-spacin
 .small{font-size:13px;color:var(--muted)}
 .menu-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}
 .menu-card svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto}
-.slice{fill:rgba(92,200,255,.10);stroke:rgba(255,255,255,.28);stroke-width:1.5;cursor:pointer;transition:fill .15s}
-.slice:hover,.slice:focus{fill:rgba(92,200,255,.34);outline:none}
+.slice{fill:rgba(124,77,255,.10);stroke:rgba(255,255,255,.28);stroke-width:1.5;cursor:pointer;transition:fill .15s}
+.slice:hover,.slice:focus{fill:rgba(124,77,255,.34);outline:none}
 .slice-label{fill:var(--text);font-size:12.5px;font-weight:600;text-anchor:middle;pointer-events:none}
 .hub{fill:var(--panel);stroke:var(--line)}
 .hub-text{fill:var(--muted);font-size:11px;text-anchor:middle;pointer-events:none}
@@ -87,17 +93,99 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   nav a:not(.btn){display:none}
 }
 @media (max-width:480px){.steps{grid-template-columns:1fr}}
+
+html{scroll-padding-top:72px}
+.js .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.js .reveal.in{opacity:1;transform:none}
+nav a.active:not(.btn){color:var(--text);box-shadow:0 2px 0 var(--accent)}
+.badge{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin:10px 0 0;min-height:20px}
+.dot{width:8px;height:8px;border-radius:50%;background:#3ddc84;flex:none}
+.demo{margin-top:28px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.stage{position:relative;height:280px;overflow:hidden;border-radius:8px;background:var(--bg);border:1px solid var(--line)}
+.d-file{position:absolute;left:8%;top:50%;transform:translate(-50%,-50%);background:var(--panel);border:1px solid var(--muted);border-radius:8px;padding:6px 12px;font-size:12px;line-height:1.35;opacity:0;z-index:3;animation:fileMove 9s infinite}
+.d-file b{display:block;font-size:13px}
+.d-ring{position:absolute;left:50%;top:50%;width:0;height:0;opacity:0;animation:ringShow 9s infinite}
+.d-ring span{position:absolute;left:0;top:0;transform:translate(-50%,-50%) rotate(var(--a)) translateY(-78px) rotate(calc(var(--a) * -1));background:rgba(124,77,255,.12);border:1px solid var(--line);border-radius:20px;padding:3px 11px;font-size:12px;white-space:nowrap}
+.d-ring span.hit{animation:chipHit 9s infinite}
+.d-key{position:absolute;left:50%;top:12px;transform:translateX(-50%);opacity:0;animation:keyShow 9s infinite;font-size:13px;color:var(--muted)}
+.d-toast{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);opacity:0;white-space:nowrap;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:7px 12px;font-size:13px;animation:toastShow 9s infinite}
+.d-toast small{color:var(--link);margin-left:12px;font-size:12px}
+.d-cap{position:relative;height:24px;margin-top:12px;text-align:center;font-size:14px;color:var(--muted)}
+.d-cap span{position:absolute;inset:0;opacity:0}
+.d-cap span:nth-child(1){animation:c1 9s infinite}
+.d-cap span:nth-child(2){animation:c2 9s infinite}
+.d-cap span:nth-child(3){animation:c3 9s infinite}
+.d-cap span:nth-child(4){animation:c4 9s infinite}
+@keyframes fileMove{0%{left:8%;top:50%;opacity:0;transform:translate(-50%,-50%) scale(1)}4%{left:8%;opacity:1}34%{left:50%;top:50%;opacity:1}52%{left:50%;top:50%;opacity:1}62%{left:50%;top:calc(50% - 78px);opacity:1;transform:translate(-50%,-50%) scale(1)}67%{left:50%;top:calc(50% - 78px);opacity:0;transform:translate(-50%,-50%) scale(.3)}100%{left:50%;opacity:0}}
+@keyframes ringShow{0%,26%{opacity:0;transform:scale(.7)}32%{opacity:1;transform:scale(1)}66%{opacity:1;transform:scale(1)}72%,100%{opacity:0;transform:scale(1)}}
+@keyframes chipHit{0%,55%{background:rgba(124,77,255,.12);border-color:var(--line)}59%,66%{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}72%,100%{background:rgba(124,77,255,.12);border-color:var(--line)}}
+@keyframes keyShow{0%,22%{opacity:0}26%,34%{opacity:1}38%,100%{opacity:0}}
+@keyframes toastShow{0%,68%{opacity:0;bottom:0}74%,94%{opacity:1;bottom:8px}100%{opacity:0;bottom:8px}}
+@keyframes c1{0%,22%{opacity:1}26%,100%{opacity:0}}
+@keyframes c2{0%,22%{opacity:0}26%,48%{opacity:1}52%,100%{opacity:0}}
+@keyframes c3{0%,48%{opacity:0}52%,66%{opacity:1}70%,100%{opacity:0}}
+@keyframes c4{0%,68%{opacity:0}72%,95%{opacity:1}99%,100%{opacity:0}}
+.dev{display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px}
+.avatar{width:120px;height:120px;border-radius:50%;border:1px solid var(--line);object-fit:cover;background:var(--bg)}
+.dev h3{margin:0;font-size:22px}
+.role{color:var(--link);margin:0 0 10px;font-weight:600}
+.dev p{margin:0;color:var(--muted)}
+.dev p.role{color:var(--link)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.chips span{border:1px solid var(--line);border-radius:20px;padding:2px 12px;font-size:13px;color:var(--muted)}
+.links{display:flex;gap:10px;flex-wrap:wrap}
+.stats{display:flex;gap:28px;margin-top:18px;font-size:13px;color:var(--muted)}
+.stats b{display:block;color:var(--text);font-size:20px;line-height:1.2}
+.contact{display:grid;grid-template-columns:1fr 1.2fr;gap:24px;align-items:start}
+.mail{display:block;font-size:18px;font-weight:600;margin:6px 0 14px;word-break:break-all}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;font-size:14px;color:var(--muted)}
+input,select,textarea{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit}
+textarea{min-height:110px;resize:vertical}
+button.btn{cursor:pointer;font:inherit;font-weight:600}
+@media (max-width:820px){.dev,.contact{grid-template-columns:1fr}.avatar{width:96px;height:96px}}
+@media (prefers-reduced-motion:reduce){
+  .d-file,.d-cap span,.d-key,.d-ring span.hit{animation:none}
+  .d-ring{animation:none;opacity:1}
+  .d-toast{animation:none;opacity:1}
+  .d-cap span:nth-child(4){animation:none;opacity:1}
+  .js .reveal{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
+
+.card,.steps li,.dev,.menu-card,.demo,details{position:relative;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,border-color .25s}
+.card::after,.steps li::after,.dev::after,.menu-card::after,.demo::after,details::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .25s;background:radial-gradient(circle 170px at var(--mx,50%) var(--my,50%),rgba(184,161,255,.2),transparent 70%)}
+@media (hover:hover){
+  .card:hover,.steps li:hover,.dev:hover,.menu-card:hover,.demo:hover{transform:translateY(-6px) scale(1.012);border-color:var(--link);box-shadow:var(--glow);z-index:2}
+  details:hover{transform:translateY(-3px);border-color:var(--link);box-shadow:var(--glow)}
+  .card:hover::after,.steps li:hover::after,.dev:hover::after,.menu-card:hover::after,.demo:hover::after,details:hover::after{opacity:1}
+}
+.seg button:hover{color:var(--text)}
+.menu-card svg{overflow:visible}
+.slice{transform-box:fill-box;transform-origin:center;transition:transform .2s,fill .15s,filter .2s}
+.slice:hover,.slice:focus,.slice.hot{fill:rgba(124,77,255,.45);transform:scale(1.08);filter:drop-shadow(0 0 9px rgba(184,161,255,.95))}
+.menu-card.armed{box-shadow:var(--glow);border-color:var(--link);transform:scale(1.025)}
+.dragslot{height:46px;margin:0 0 8px;display:flex;justify-content:center}
+.dragfile{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:13px;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none;transition:box-shadow .2s,transform .2s,border-color .2s}
+.dragfile:hover{border-color:var(--link);box-shadow:var(--glow);transform:translateY(-3px)}
+.dragfile small{color:var(--muted)}
+.dragfile.dragging{position:fixed;z-index:50;cursor:grabbing;pointer-events:none;box-shadow:var(--glow);border-color:var(--link);transform:scale(1.07) rotate(-3deg);transition:none}
+@media (prefers-reduced-motion:reduce){
+  .card:hover,.steps li:hover,.dev:hover,.menu-card:hover,.demo:hover,details:hover,.btn:hover,.dragfile:hover,.slice:hover,.slice.hot,.menu-card.armed{transform:none}
+}
 </style>
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 
 <header>
   <div class="wrap">
-    <a class="brand" href="#top">DragShift</a>
+    <a class="brand" href="#top">Drager</a>
     <nav aria-label="Main">
       <a href="#how">How it works</a>
       <a href="#features">Features</a>
+      <a href="#developer">About</a>
       <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
       <a href="https://github.com/Knightcode2/Drager">GitHub</a>
       <a class="btn" href="#download">Download</a>
     </nav>
@@ -110,27 +198,30 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   <div class="hero">
     <div>
       <h1>Drag a file. Press Shift. Drop it on a slice.</h1>
-      <p class="lead">DragShift is a free Windows app that converts and edits files from a radial menu that opens under your cursor. No windows to open, no websites to upload to.</p>
+      <p class="lead">Drager is a free Windows app that converts and edits files from a radial menu that opens under your cursor. No windows to open, no websites to upload to.</p>
       <div class="cta">
-        <a class="btn" id="dl-main" href="https://github.com/Knightcode2/Drager/releases/latest/download/DragShift-Setup.exe">Download for Windows</a>
+        <a class="btn" id="dl-main" href="https://github.com/Knightcode2/Drager/releases/latest/download/Drager.exe">Download for Windows</a>
         <a class="btn ghost" href="https://github.com/Knightcode2/Drager">View source</a>
       </div>
       <p class="small">Windows 10 and 11 · Free and open source (MIT) · No admin rights needed</p>
+      <p class="badge" id="ver" aria-live="polite" hidden><span class="dot"></span><span id="ver-text"></span></p>
+      <div class="note" id="os-note" hidden>Drager runs on Windows only. You can still download it here and use it on a Windows PC.</div>
     </div>
 
     <div class="menu-card">
-      <svg id="menu" viewBox="0 0 340 340" role="group" aria-label="Interactive preview of the DragShift menu"></svg>
+      <div class="dragslot"><div class="dragfile" id="dragfile" role="button" tabindex="0" aria-label="Sample file. Drag it onto a slice of the menu"><b>photo.jpg</b><small>2.4 MB</small></div></div>
+      <svg id="menu" viewBox="0 0 340 340" role="group" aria-label="Interactive preview of the Drager menu"></svg>
       <div class="seg" role="group" aria-label="Menu mode">
         <button id="m-convert" aria-pressed="true">Convert</button>
         <button id="m-tools" aria-pressed="false">Tools</button>
       </div>
-      <p class="small" style="margin:10px 0 0">Preview: hover a slice, or press <kbd>Shift</kbd> to switch modes.</p>
+      <p class="small" style="margin:10px 0 0">Drag the file onto a slice, or just hover. Press <kbd>Shift</kbd> to switch modes.</p>
     </div>
   </div>
 
-  <section id="what">
+  <section class="reveal" id="what">
     <h2>What it is</h2>
-    <p class="sub">Most file jobs are small: shrink a photo, turn a Word file into a PDF, black out a number, lock a PDF with a password. DragShift puts all of them in one place that appears exactly when you are already holding the file.</p>
+    <p class="sub">Most file jobs are small: shrink a photo, turn a Word file into a PDF, black out a number, lock a PDF with a password. Drager puts all of them in one place that appears exactly when you are already holding the file.</p>
     <div class="grid3">
       <div class="card"><h3>Originals are never changed</h3><p>Every result is saved as a new file next to the original. If you don't like it, press Undo and the new file goes to the Recycle Bin.</p></div>
       <div class="card"><h3>Works offline</h3><p>Files are processed on your PC. Nothing is uploaded, so private documents stay private.</p></div>
@@ -138,7 +229,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     </div>
   </section>
 
-  <section id="how">
+  <section class="reveal" id="how">
     <h2>How it works</h2>
     <p class="sub">Four steps, all with the mouse and one key.</p>
     <ol class="steps">
@@ -147,11 +238,27 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       <li><h3>Drop on a slice</h3><p>Choose the action by dropping the file on it. Tools that need options open a small window.</p></li>
       <li><h3>Check the result</h3><p>The new file appears beside the original. A notification shows what changed, with Open, Show in folder and Undo.</p></li>
     </ol>
-    <div class="note" style="margin-top:20px"><strong>Prefer not to drag?</strong> Right-click a file and choose <strong>DragShift…</strong>, use <strong>Send to → DragShift</strong>, or double-click the tray icon to pick a file.</div>
-    <div class="shot"><img src="https://raw.githubusercontent.com/Knightcode2/Drager/main/docs/preview.png" alt="The DragShift radial menu and the Add BG editor" loading="lazy" onerror="this.parentNode.style.display='none'"></div>
+    <div class="note" style="margin-top:20px"><strong>Prefer not to drag?</strong> Double-click the tray icon to pick a file instead.</div>
+    <div class="demo" aria-label="Animated walkthrough">
+      <div class="stage" aria-hidden="true">
+        <div class="d-key"><kbd>Shift</kbd></div>
+        <div class="d-file"><b>photo.jpg</b>2.4 MB</div>
+        <div class="d-ring">
+          <span class="hit" style="--a:0deg">Compress</span>
+          <span style="--a:60deg">Resize</span>
+          <span style="--a:120deg">Crop</span>
+          <span style="--a:180deg">Annotate</span>
+          <span style="--a:240deg">Redact</span>
+          <span style="--a:300deg">Metadata</span>
+        </div>
+        <div class="d-toast">2.4 MB → 610 KB · 75% smaller <small>Undo</small></div>
+      </div>
+      <div class="d-cap"><span>Drag a file</span><span>Press Shift to open the menu</span><span>Drop it on a slice</span><span>Done. The original stays untouched</span></div>
+    </div>
+    <div class="shot"><img src="https://raw.githubusercontent.com/Knightcode2/Drager/main/docs/preview.png" alt="The Drager radial menu and the Add BG editor" loading="lazy" onerror="this.parentNode.style.display='none'"></div>
   </section>
 
-  <section id="features">
+  <section class="reveal" id="features">
     <h2>What it can do</h2>
     <p class="sub">The menu changes to match the file you are dragging.</p>
     <div class="tablewrap">
@@ -167,41 +274,77 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px">Settings in the tray menu: trigger key (Shift, Ctrl or Alt), output folder (next to the original or a DragShift subfolder), JPG/WebP quality, PDF-to-image resolution, and start at login.</p>
+    <p class="small" style="margin-top:14px">Settings in the tray menu: trigger key (Shift, Ctrl or Alt), output folder (next to the original or a subfolder), JPG/WebP quality, PDF-to-image resolution, and start at login.</p>
   </section>
 
-  <section id="download">
+  <section class="reveal" id="download">
     <h2>Download</h2>
-    <p class="sub">Choose the installer for everyday use, or the portable file to run without installing.</p>
-    <div class="dl">
-      <div class="card">
-        <h3>Installer <span class="tag">Recommended</span></h3>
-        <p>Installs for your user only, so no admin rights are needed. Adds a Start menu entry, an optional start-with-Windows setting, a right-click DragShift… entry and Send to → DragShift. Uninstalls cleanly from Settings → Apps.</p>
-        <a class="btn" href="https://github.com/Knightcode2/Drager/releases/latest/download/DragShift-Setup.exe">Download DragShift-Setup.exe</a>
-      </div>
-      <div class="card">
-        <h3>Portable</h3>
-        <p>A single exe you can run from anywhere, including a USB drive. Nothing is installed and no context-menu entries are added.</p>
-        <a class="btn ghost" href="https://github.com/Knightcode2/Drager/releases/latest/download/DragShift.exe">Download DragShift.exe</a>
+    <p class="sub">One file, no installer. Download it, double-click it and Drager starts in your system tray.</p>
+    <div class="card" style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;max-width:560px">
+      <h3>Drager.exe</h3>
+      <p>For Windows 10 and 11. Runs from any folder, needs no admin rights and nothing else to install.</p>
+      <a class="btn" id="dl-exe" href="https://github.com/Knightcode2/Drager/releases/latest/download/Drager.exe">Download Drager.exe</a>
+    </div>
+    <div class="note"><strong>First launch:</strong> Windows SmartScreen may show a warning because the app is not code-signed yet. Click <strong>More info → Run anyway</strong>. The full source code is public so you can inspect it.</div>
+  </section>
+
+  <section class="reveal" id="developer">
+    <h2>About this version</h2>
+    <p class="sub">Drager is a ready-to-run build made for people who just want the app to work.</p>
+    <div class="dev">
+      <img class="avatar" src="https://avatars.githubusercontent.com/u/168701920?s=240&amp;v=4" alt="Rishi" onerror="this.style.visibility='hidden'">
+      <div>
+        <h3>Rishi</h3>
+        <p class="role">Made the one-file exe</p>
+        <p>I'm a B.Tech student in Computer Science and Engineering (AI specialization, third year) at Babu Banarasi Das University, Lucknow.</p>
+        <p style="margin-top:10px">I made the exe file for Drager so it is easy to install and use directly, especially for non-technical users. The original app is complex to set up: running it from source needs Python and build tools. I changed that into one simple exe file that is available to download and run straight away, with no app creation, no installing anything else and no setup problems.</p>
+        <div class="links" style="margin-top:16px">
+          <a class="btn ghost" href="https://github.com/Knightcode2">GitHub profile</a>
+          <a class="btn ghost" href="https://github.com/Knightcode2/Drager">Project repository</a>
+          <a class="btn ghost" data-mail href="#contact">Email</a>
+        </div>
+        <div class="stats" id="stats" hidden>
+          <div><b id="st-stars">0</b>stars</div>
+          <div><b id="st-forks">0</b>forks</div>
+          <div><b id="st-dl">0</b>downloads</div>
+        </div>
       </div>
     </div>
-    <div class="note"><strong>First launch:</strong> Windows SmartScreen may show a warning because the app is not code-signed yet. Click <strong>More info → Run anyway</strong>. The full source code is public so you can inspect or build it yourself.</div>
-
-    <h3 style="margin:28px 0 0;font-size:18px">Build from source</h3>
-    <p class="small" style="margin:4px 0 0">Download the repository, unzip it and double-click <code>Install-DragShift.bat</code>. It installs Python and Inno Setup if missing, builds the app and opens the installer. Or run it directly:</p>
-    <pre>pip install -r requirements.txt
-python -m dragshift</pre>
-    <p class="small"><a href="https://github.com/Knightcode2/Drager/releases">All releases</a> · <a href="https://github.com/Knightcode2/Drager/archive/refs/heads/main.zip">Source code (.zip)</a></p>
+    <div class="note" id="credit"><strong>Credit:</strong> Drager is inspired by and taken from <span id="credit-name">DragShift</span>, which was originally developed by someone else. All credit for the original app goes to its creator.</div>
   </section>
 
-  <section id="faq">
+  <section class="reveal" id="faq">
     <h2>Questions</h2>
     <details><summary>Does it upload my files anywhere?</summary><p>No. Conversion and editing happen on your computer.</p></details>
     <details><summary>Will it overwrite my original file?</summary><p>No. Results are saved as new files, and Undo moves the new file to the Recycle Bin.</p></details>
-    <details><summary>Why does Windows warn me when I run it?</summary><p>The app is not code-signed yet, so SmartScreen does not recognise it. Use More info → Run anyway. Signing through the SignPath Foundation is planned for Windows builds.</p></details>
-    <details><summary>Do I need Microsoft Word to convert Word files?</summary><p>No. If Word is installed DragShift uses it for the best fidelity; otherwise it uses a built-in renderer.</p></details>
+    <details><summary>Why does Windows warn me when I run it?</summary><p>The app is not code-signed yet, so SmartScreen does not recognise it. Use More info → Run anyway.</p></details>
+    <details><summary>Do I need Microsoft Word to convert Word files?</summary><p>No. If Word is installed Drager uses it for the best fidelity; otherwise it uses a built-in renderer.</p></details>
     <details><summary>Where is my log file if something goes wrong?</summary><p>At <code>%LOCALAPPDATA%\DragShift\log.txt</code>. You can attach it when you <a href="https://github.com/Knightcode2/Drager/issues">open an issue</a>.</p></details>
-    <details><summary>How do I remove it?</summary><p>Use Settings → Apps → DragShift → Uninstall. The portable exe can simply be deleted.</p></details>
+    <details><summary>How do I remove it?</summary><p>Close Drager from the tray icon, then delete the exe file.</p></details>
+  </section>
+
+  <section class="reveal" id="contact">
+    <h2>Contact</h2>
+    <p class="sub">Questions, bug reports or ideas for new tools? Send a message and it will reach the developer directly.</p>
+    <div class="contact">
+      <div class="card">
+        <h3>Email</h3>
+        <a class="mail" data-mail href="#contact">email</a>
+        <div class="links">
+          <button class="btn" id="copy-mail" type="button">Copy email</button>
+          <a class="btn ghost" href="https://github.com/Knightcode2/Drager/issues">Report a bug on GitHub</a>
+        </div>
+        <p class="small" style="margin-top:14px">Please include your Windows version and the log file from <code>%LOCALAPPDATA%\DragShift\log.txt</code> when reporting a problem.</p>
+      </div>
+      <form class="card" id="cform">
+        <div class="field"><label for="c-name">Your name</label><input id="c-name" required autocomplete="name"></div>
+        <div class="field"><label for="c-topic">Topic</label>
+          <select id="c-topic"><option>Question</option><option>Bug report</option><option>Feature idea</option><option>Other</option></select></div>
+        <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" required></textarea></div>
+        <button class="btn" type="submit">Send by email</button>
+        <p class="small" style="margin:10px 0 0">This opens your email app with the message filled in.</p>
+      </form>
+    </div>
   </section>
 
 </div>
@@ -209,7 +352,7 @@ python -m dragshift</pre>
 
 <footer>
   <div class="wrap">
-    <span>DragShift · MIT License</span>
+    <span>Drager · MIT License · Inspired by DragShift</span>
     <span><a href="https://github.com/Knightcode2/Drager">GitHub</a> · <a href="https://github.com/Knightcode2/Drager/issues">Report an issue</a></span>
   </div>
 </footer>
@@ -224,7 +367,7 @@ python -m dragshift</pre>
     JPG:"Convert to JPG",PNG:"Convert to PNG",WEBP:"Convert to WEBP",PDF:"Convert to PDF",DOCX:"Convert to Word",TXT:"Extract text",
     Compress:"Smaller file size",Resize:"Change dimensions",Crop:"Trim to a ratio",Annotate:"Arrows, boxes, text",Redact:"Black out details",Metadata:"View or remove GPS"
   };
-  var mode="convert",svg=document.getElementById("menu"),NS="http://www.w3.org/2000/svg";
+  var tm,mode="convert",svg=document.getElementById("menu"),NS="http://www.w3.org/2000/svg";
   var cx=170,cy=170,R=158,r=62,n=6;
   function pt(rad,a){return [cx+rad*Math.cos(a),cy+rad*Math.sin(a)]}
   function el(t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);return e}
@@ -244,7 +387,7 @@ python -m dragshift</pre>
         function on(){hubT.textContent=name;hubS.textContent=desc[name]}
         path.addEventListener("mouseenter",on);path.addEventListener("focus",on);
         path.addEventListener("mouseleave",off);path.addEventListener("blur",off);
-        path.addEventListener("click",function(){hubS.textContent="Drop a file here in the app"});
+        path.addEventListener("click",function(){hubT.textContent="Done";hubS.textContent="photo.jpg → "+name;clearTimeout(tm);tm=setTimeout(off,2200)});
       })(items[i]);
       g.appendChild(path);g.appendChild(t);svg.appendChild(g);
     }
@@ -266,6 +409,118 @@ python -m dragshift</pre>
     if(e.key==="Shift"&&!e.repeat&&!e.target.closest("input,textarea"))set(mode==="convert"?"tools":"convert");
   });
   draw();
+})();
+</script>
+<script>
+(function(){
+  var CONTACT_EMAIL="vivekberma01780@gmail.com";
+  var REPO="Knightcode2/Drager";
+  var ORIGINAL_URL=""; /* paste the link to the original DragShift project here */
+  if(ORIGINAL_URL){var cn=document.getElementById("credit-name");cn.innerHTML='<a href="'+ORIGINAL_URL+'">DragShift</a>'}
+
+  document.querySelectorAll("[data-mail]").forEach(function(a){
+    a.href="mailto:"+CONTACT_EMAIL;
+    if(a.classList.contains("mail"))a.textContent=CONTACT_EMAIL;
+  });
+  var cp=document.getElementById("copy-mail");
+  cp.addEventListener("click",function(){
+    function ok(){cp.textContent="Copied";setTimeout(function(){cp.textContent="Copy email"},1800)}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(CONTACT_EMAIL).then(ok,function(){window.prompt("Copy this email:",CONTACT_EMAIL)})}
+    else window.prompt("Copy this email:",CONTACT_EMAIL);
+  });
+  document.getElementById("cform").addEventListener("submit",function(e){
+    e.preventDefault();
+    var n=document.getElementById("c-name").value.trim(),t=document.getElementById("c-topic").value,m=document.getElementById("c-msg").value.trim();
+    var subject="Drager: "+t;
+    var body=m+"\n\n"+n;
+    location.href="mailto:"+CONTACT_EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
+  });
+
+  if(!/Windows/i.test(navigator.userAgent))document.getElementById("os-note").hidden=false;
+
+  var secs=[].slice.call(document.querySelectorAll("section.reveal"));
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.1});
+    secs.forEach(function(s){io.observe(s)});
+    var links={};
+    document.querySelectorAll('nav a[href^="#"]').forEach(function(a){links[a.getAttribute("href").slice(1)]=a});
+    var io2=new IntersectionObserver(function(es){es.forEach(function(e){
+      var a=links[e.target.id];
+      if(a&&e.isIntersecting){Object.keys(links).forEach(function(k){links[k].classList.remove("active")});a.classList.add("active")}
+    })},{rootMargin:"-40% 0px -55% 0px"});
+    secs.forEach(function(s){io2.observe(s)});
+  }else secs.forEach(function(s){s.classList.add("in")});
+
+  document.querySelectorAll(".card,.steps li,.dev,.menu-card,.demo,details").forEach(function(c){
+    c.addEventListener("pointermove",function(e){var r=c.getBoundingClientRect();c.style.setProperty("--mx",(e.clientX-r.left)+"px");c.style.setProperty("--my",(e.clientY-r.top)+"px")});
+  });
+
+  var chip=document.getElementById("dragfile"),mcard=document.querySelector(".menu-card"),drag=null,hot=null;
+  function fire(el,type){el.dispatchEvent(new MouseEvent(type))}
+  function setHot(sl){
+    if(hot===sl)return;
+    if(hot){hot.classList.remove("hot");fire(hot,"mouseleave")}
+    hot=sl;
+    if(hot){hot.classList.add("hot");fire(hot,"mouseenter")}
+  }
+  function place(e){chip.style.left=(e.clientX-drag.ox)+"px";chip.style.top=(e.clientY-drag.oy)+"px"}
+  chip.addEventListener("pointerdown",function(e){
+    var r=chip.getBoundingClientRect();
+    drag={ox:e.clientX-r.left,oy:e.clientY-r.top};
+    chip.style.width=r.width+"px";
+    chip.classList.add("dragging");
+    place(e);e.preventDefault();
+  });
+  document.addEventListener("pointermove",function(e){
+    if(!drag)return;
+    place(e);
+    var r=mcard.getBoundingClientRect();
+    mcard.classList.toggle("armed",e.clientX>r.left&&e.clientX<r.right&&e.clientY>r.top&&e.clientY<r.bottom);
+    var el=document.elementFromPoint(e.clientX,e.clientY);
+    setHot(el&&el.classList&&el.classList.contains("slice")?el:null);
+  });
+  function drop(){
+    if(!drag)return;
+    drag=null;
+    var t=hot;hot=null;
+    if(t){t.classList.remove("hot");t.dispatchEvent(new MouseEvent("click"))}
+    mcard.classList.remove("armed");
+    chip.classList.remove("dragging");chip.style.width="";chip.style.left="";chip.style.top="";
+  }
+  document.addEventListener("pointerup",drop);
+  document.addEventListener("pointercancel",drop);
+  chip.addEventListener("keydown",function(e){
+    if(e.key==="Enter"||e.key===" "){e.preventDefault();var sl=document.querySelector("#menu .slice");if(sl)sl.dispatchEvent(new MouseEvent("click"))}
+  });
+
+  function size(n){return n>=1048576?(n/1048576).toFixed(1)+" MB":Math.max(1,Math.round(n/1024))+" KB"}
+  function setBtn(id,asset,label){
+    var b=document.getElementById(id);if(!b||!asset)return;
+    b.href=asset.browser_download_url;b.textContent=label+" ("+size(asset.size)+")";
+  }
+  fetch("https://api.github.com/repos/"+REPO+"/releases/latest")
+    .then(function(r){return r.ok?r.json():Promise.reject()})
+    .then(function(d){
+      var total=0,exe=null;
+      (d.assets||[]).forEach(function(a){
+        total+=a.download_count||0;
+        if(!exe&&/\.exe$/i.test(a.name))exe=a;
+      });
+      setBtn("dl-main",exe,"Download for Windows");
+      setBtn("dl-exe",exe,"Download "+(exe&&exe.name));
+      var when=d.published_at?new Date(d.published_at).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}):"";
+      document.getElementById("ver-text").textContent="Latest release "+d.tag_name+(when?" · "+when:"")+" · "+total.toLocaleString()+" downloads";
+      document.getElementById("ver").hidden=false;
+      document.getElementById("st-dl").textContent=total.toLocaleString();
+      document.getElementById("stats").hidden=false;
+    }).catch(function(){});
+  fetch("https://api.github.com/repos/"+REPO)
+    .then(function(r){return r.ok?r.json():Promise.reject()})
+    .then(function(d){
+      document.getElementById("st-stars").textContent=d.stargazers_count;
+      document.getElementById("st-forks").textContent=d.forks_count;
+      document.getElementById("stats").hidden=false;
+    }).catch(function(){});
 })();
 </script>
 </body>
