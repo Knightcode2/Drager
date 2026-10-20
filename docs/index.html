@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DragShift – Convert and edit files by dragging them onto a menu</title>
+<meta name="description" content="DragShift is a free Windows app. Drag any file, press Shift, drop it on a slice to convert, compress, resize, crop, annotate, redact, merge, split or protect it. Originals are never changed.">
+<style>
+:root{
+  --bg:#0f1418;--panel:#161d23;--line:#27313a;--text:#e8edf1;--muted:#8d9aa5;--accent:#5cc8ff;--accent-ink:#04202c;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){
+  :root{--bg:#f4f6f8;--panel:#fff;--line:#dbe2e8;--text:#14202a;--muted:#5a6a77;--accent:#0a7bb5;--accent-ink:#fff;color-scheme:light}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+.brand{font-weight:700;letter-spacing:.2px;color:var(--text);text-decoration:none}
+nav{display:flex;gap:20px;align-items:center;font-size:14px}
+nav a{color:var(--muted);text-decoration:none}
+nav a:hover{color:var(--text)}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:600;padding:11px 20px;border-radius:8px;text-decoration:none;border:1px solid var(--accent)}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--text);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--muted)}
+nav .btn{padding:6px 14px;font-size:14px;color:var(--accent-ink)}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding:56px 0 48px}
+h1{font-size:clamp(32px,5vw,48px);line-height:1.12;margin:0 0 16px;letter-spacing:-.5px}
+.lead{color:var(--muted);font-size:18px;margin:0 0 24px;max-width:46ch}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.small{font-size:13px;color:var(--muted)}
+.menu-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}
+.menu-card svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto}
+.slice{fill:rgba(92,200,255,.10);stroke:rgba(255,255,255,.28);stroke-width:1.5;cursor:pointer;transition:fill .15s}
+.slice:hover,.slice:focus{fill:rgba(92,200,255,.34);outline:none}
+.slice-label{fill:var(--text);font-size:12.5px;font-weight:600;text-anchor:middle;pointer-events:none}
+.hub{fill:var(--panel);stroke:var(--line)}
+.hub-text{fill:var(--muted);font-size:11px;text-anchor:middle;pointer-events:none}
+.hub-title{fill:var(--text);font-size:13px;font-weight:600;text-anchor:middle;pointer-events:none}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:10px}
+.seg button{background:transparent;color:var(--muted);border:0;padding:6px 16px;font:inherit;font-size:14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+section{padding:48px 0;border-top:1px solid var(--line)}
+h2{font-size:28px;margin:0 0 8px;letter-spacing:-.3px}
+.sub{color:var(--muted);margin:0 0 28px;max-width:60ch}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;counter-increment:s}
+.steps li::before{content:counter(s);display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:13px;margin-bottom:10px}
+.steps h3{margin:0 0 4px;font-size:16px}
+.steps p{margin:0;color:var(--muted);font-size:14px}
+kbd{background:var(--bg);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 6px;font:inherit;font-size:.9em}
+.shot{margin-top:28px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+.shot img{display:block;width:100%;height:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;white-space:nowrap}
+.tablewrap{overflow-x:auto}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
+.card h3{margin:0 0 6px;font-size:16px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.dl .card{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.dl .card p{flex:1}
+.tag{font-size:12px;background:var(--accent);color:var(--accent-ink);border-radius:20px;padding:1px 9px;font-weight:600;margin-left:6px;vertical-align:middle}
+.note{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:12px 16px;font-size:14px;color:var(--muted)}
+.note strong{color:var(--text)}
+code{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.9em}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 16px;overflow-x:auto;font-size:14px;margin:12px 0 0}
+details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}
+details p{margin:10px 0 0;color:var(--muted);font-size:15px}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr;padding-top:36px}
+  .steps{grid-template-columns:1fr 1fr}
+  .grid3,.dl{grid-template-columns:1fr}
+  nav a:not(.btn){display:none}
+}
+@media (max-width:480px){.steps{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#top">DragShift</a>
+    <nav aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com/Knightcode2/Drager">GitHub</a>
+      <a class="btn" href="#download">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<div class="wrap">
+
+  <div class="hero">
+    <div>
+      <h1>Drag a file. Press Shift. Drop it on a slice.</h1>
+      <p class="lead">DragShift is a free Windows app that converts and edits files from a radial menu that opens under your cursor. No windows to open, no websites to upload to.</p>
+      <div class="cta">
+        <a class="btn" id="dl-main" href="https://github.com/Knightcode2/Drager/releases/latest/download/DragShift-Setup.exe">Download for Windows</a>
+        <a class="btn ghost" href="https://github.com/Knightcode2/Drager">View source</a>
+      </div>
+      <p class="small">Windows 10 and 11 · Free and open source (MIT) · No admin rights needed</p>
+    </div>
+
+    <div class="menu-card">
+      <svg id="menu" viewBox="0 0 340 340" role="group" aria-label="Interactive preview of the DragShift menu"></svg>
+      <div class="seg" role="group" aria-label="Menu mode">
+        <button id="m-convert" aria-pressed="true">Convert</button>
+        <button id="m-tools" aria-pressed="false">Tools</button>
+      </div>
+      <p class="small" style="margin:10px 0 0">Preview: hover a slice, or press <kbd>Shift</kbd> to switch modes.</p>
+    </div>
+  </div>
+
+  <section id="what">
+    <h2>What it is</h2>
+    <p class="sub">Most file jobs are small: shrink a photo, turn a Word file into a PDF, black out a number, lock a PDF with a password. DragShift puts all of them in one place that appears exactly when you are already holding the file.</p>
+    <div class="grid3">
+      <div class="card"><h3>Originals are never changed</h3><p>Every result is saved as a new file next to the original. If you don't like it, press Undo and the new file goes to the Recycle Bin.</p></div>
+      <div class="card"><h3>Works offline</h3><p>Files are processed on your PC. Nothing is uploaded, so private documents stay private.</p></div>
+      <div class="card"><h3>Lives in the tray</h3><p>It runs quietly in the system tray, can start with Windows, and uses a menu you open only when you need it.</p></div>
+    </div>
+  </section>
+
+  <section id="how">
+    <h2>How it works</h2>
+    <p class="sub">Four steps, all with the mouse and one key.</p>
+    <ol class="steps">
+      <li><h3>Start dragging</h3><p>Pick up an image, PDF, Word or text file in File Explorer or on the desktop.</p></li>
+      <li><h3>Press Shift</h3><p>The menu opens under your cursor. Tap <kbd>Shift</kbd> again to switch between Convert and Tools.</p></li>
+      <li><h3>Drop on a slice</h3><p>Choose the action by dropping the file on it. Tools that need options open a small window.</p></li>
+      <li><h3>Check the result</h3><p>The new file appears beside the original. A notification shows what changed, with Open, Show in folder and Undo.</p></li>
+    </ol>
+    <div class="note" style="margin-top:20px"><strong>Prefer not to drag?</strong> Right-click a file and choose <strong>DragShift…</strong>, use <strong>Send to → DragShift</strong>, or double-click the tray icon to pick a file.</div>
+    <div class="shot"><img src="https://raw.githubusercontent.com/Knightcode2/Drager/main/docs/preview.png" alt="The DragShift radial menu and the Add BG editor" loading="lazy" onerror="this.parentNode.style.display='none'"></div>
+  </section>
+
+  <section id="features">
+    <h2>What it can do</h2>
+    <p class="sub">The menu changes to match the file you are dragging.</p>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>File type</th><th>Convert to</th><th>Tools</th></tr></thead>
+      <tbody>
+        <tr><td>Images<br><span class="small" style="font-weight:400">JPG, PNG, WEBP, HEIC, AVIF, TIFF, BMP, GIF, ICO</span></td>
+          <td>Any of those formats, or PDF. Several images become one combined PDF.</td>
+          <td>Compress (by quality or to a target size such as under 500 KB, with before/after preview) · Resize · Crop · Edit (auto, light and colour, rotate, flip, B&amp;W) · Annotate (arrows, boxes, numbered steps, text, marker) · Redact · Add background · Metadata (view camera, date and GPS location; remove location or everything)</td></tr>
+        <tr><td>PDF</td><td>JPG or PNG (one per page), DOCX, TXT</td><td>Compress · Split · Rotate · Merge (drop several) · Protect with an AES-256 password · Extract images · Metadata</td></tr>
+        <tr><td>Word (.docx)</td><td>PDF (uses Microsoft Word if installed, otherwise a built-in renderer), TXT</td><td>None</td></tr>
+        <tr><td>Text<br><span class="small" style="font-weight:400">.txt, .md, .csv</span></td><td>PDF, DOCX</td><td>None</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="small" style="margin-top:14px">Settings in the tray menu: trigger key (Shift, Ctrl or Alt), output folder (next to the original or a DragShift subfolder), JPG/WebP quality, PDF-to-image resolution, and start at login.</p>
+  </section>
+
+  <section id="download">
+    <h2>Download</h2>
+    <p class="sub">Choose the installer for everyday use, or the portable file to run without installing.</p>
+    <div class="dl">
+      <div class="card">
+        <h3>Installer <span class="tag">Recommended</span></h3>
+        <p>Installs for your user only, so no admin rights are needed. Adds a Start menu entry, an optional start-with-Windows setting, a right-click DragShift… entry and Send to → DragShift. Uninstalls cleanly from Settings → Apps.</p>
+        <a class="btn" href="https://github.com/Knightcode2/Drager/releases/latest/download/DragShift-Setup.exe">Download DragShift-Setup.exe</a>
+      </div>
+      <div class="card">
+        <h3>Portable</h3>
+        <p>A single exe you can run from anywhere, including a USB drive. Nothing is installed and no context-menu entries are added.</p>
+        <a class="btn ghost" href="https://github.com/Knightcode2/Drager/releases/latest/download/DragShift.exe">Download DragShift.exe</a>
+      </div>
+    </div>
+    <div class="note"><strong>First launch:</strong> Windows SmartScreen may show a warning because the app is not code-signed yet. Click <strong>More info → Run anyway</strong>. The full source code is public so you can inspect or build it yourself.</div>
+
+    <h3 style="margin:28px 0 0;font-size:18px">Build from source</h3>
+    <p class="small" style="margin:4px 0 0">Download the repository, unzip it and double-click <code>Install-DragShift.bat</code>. It installs Python and Inno Setup if missing, builds the app and opens the installer. Or run it directly:</p>
+    <pre>pip install -r requirements.txt
+python -m dragshift</pre>
+    <p class="small"><a href="https://github.com/Knightcode2/Drager/releases">All releases</a> · <a href="https://github.com/Knightcode2/Drager/archive/refs/heads/main.zip">Source code (.zip)</a></p>
+  </section>
+
+  <section id="faq">
+    <h2>Questions</h2>
+    <details><summary>Does it upload my files anywhere?</summary><p>No. Conversion and editing happen on your computer.</p></details>
+    <details><summary>Will it overwrite my original file?</summary><p>No. Results are saved as new files, and Undo moves the new file to the Recycle Bin.</p></details>
+    <details><summary>Why does Windows warn me when I run it?</summary><p>The app is not code-signed yet, so SmartScreen does not recognise it. Use More info → Run anyway. Signing through the SignPath Foundation is planned for Windows builds.</p></details>
+    <details><summary>Do I need Microsoft Word to convert Word files?</summary><p>No. If Word is installed DragShift uses it for the best fidelity; otherwise it uses a built-in renderer.</p></details>
+    <details><summary>Where is my log file if something goes wrong?</summary><p>At <code>%LOCALAPPDATA%\DragShift\log.txt</code>. You can attach it when you <a href="https://github.com/Knightcode2/Drager/issues">open an issue</a>.</p></details>
+    <details><summary>How do I remove it?</summary><p>Use Settings → Apps → DragShift → Uninstall. The portable exe can simply be deleted.</p></details>
+  </section>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>DragShift · MIT License</span>
+    <span><a href="https://github.com/Knightcode2/Drager">GitHub</a> · <a href="https://github.com/Knightcode2/Drager/issues">Report an issue</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var sets={
+    convert:["JPG","PNG","WEBP","PDF","DOCX","TXT"],
+    tools:["Compress","Resize","Crop","Annotate","Redact","Metadata"]
+  };
+  var desc={
+    JPG:"Convert to JPG",PNG:"Convert to PNG",WEBP:"Convert to WEBP",PDF:"Convert to PDF",DOCX:"Convert to Word",TXT:"Extract text",
+    Compress:"Smaller file size",Resize:"Change dimensions",Crop:"Trim to a ratio",Annotate:"Arrows, boxes, text",Redact:"Black out details",Metadata:"View or remove GPS"
+  };
+  var mode="convert",svg=document.getElementById("menu"),NS="http://www.w3.org/2000/svg";
+  var cx=170,cy=170,R=158,r=62,n=6;
+  function pt(rad,a){return [cx+rad*Math.cos(a),cy+rad*Math.sin(a)]}
+  function el(t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);return e}
+  var hubT,hubS;
+  function draw(){
+    while(svg.firstChild)svg.removeChild(svg.firstChild);
+    var items=sets[mode];
+    for(var i=0;i<n;i++){
+      var a0=-Math.PI/2+i*2*Math.PI/n+0.02,a1=-Math.PI/2+(i+1)*2*Math.PI/n-0.02;
+      var p1=pt(R,a0),p2=pt(R,a1),p3=pt(r,a1),p4=pt(r,a0);
+      var d="M"+p1+" A"+R+","+R+" 0 0 1 "+p2+" L"+p3+" A"+r+","+r+" 0 0 0 "+p4+" Z";
+      var g=el("g",{});
+      var path=el("path",{d:d,"class":"slice",tabindex:"0",role:"button","aria-label":items[i]});
+      var m=(a0+a1)/2,lp=pt((R+r)/2,m);
+      var t=el("text",{x:lp[0],y:lp[1]+4,"class":"slice-label"});t.textContent=items[i];
+      (function(name){
+        function on(){hubT.textContent=name;hubS.textContent=desc[name]}
+        path.addEventListener("mouseenter",on);path.addEventListener("focus",on);
+        path.addEventListener("mouseleave",off);path.addEventListener("blur",off);
+        path.addEventListener("click",function(){hubS.textContent="Drop a file here in the app"});
+      })(items[i]);
+      g.appendChild(path);g.appendChild(t);svg.appendChild(g);
+    }
+    svg.appendChild(el("circle",{cx:cx,cy:cy,r:r-6,"class":"hub"}));
+    hubT=el("text",{x:cx,y:cy-2,"class":"hub-title"});
+    hubS=el("text",{x:cx,y:cy+16,"class":"hub-text"});
+    svg.appendChild(hubT);svg.appendChild(hubS);off();
+  }
+  function off(){hubT.textContent=mode==="convert"?"Convert":"Tools";hubS.textContent="Shift to switch"}
+  function set(m){
+    mode=m;
+    document.getElementById("m-convert").setAttribute("aria-pressed",m==="convert");
+    document.getElementById("m-tools").setAttribute("aria-pressed",m==="tools");
+    draw();
+  }
+  document.getElementById("m-convert").onclick=function(){set("convert")};
+  document.getElementById("m-tools").onclick=function(){set("tools")};
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Shift"&&!e.repeat&&!e.target.closest("input,textarea"))set(mode==="convert"?"tools":"convert");
+  });
+  draw();
+})();
+</script>
+</body>
+</html>
